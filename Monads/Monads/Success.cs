@@ -7,12 +7,18 @@ namespace Monads {
         private Success(A value) : base(value) {   
         }
 
+        public override L Left {
+            get {
+                return default(L);
+            }
+        }
+
         public override Validation<L, B> Map<B>(Func<A, B> mapper) {
-            return CreateSuccess<L, B>(mapper(m_value));
+            return CreateSuccess<L, B>(mapper(Value));
         }
 
         public override Validation<L, B> Bind<B>(Func<A, Validation<L, B>> mapper) {
-            return mapper(m_value);
+            return mapper(Value);
         }
 
         public override bool IsSuccess() {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 
 namespace Monads {
 
@@ -20,25 +21,22 @@ namespace Monads {
 
         public void Run() {
             var p = new Person {
-                Age = 20,
-                Name = "john"
+                Age = -1,
+                Name = "John"
             };
             var validation = ValidateAge(p);
-            ProcessValidationResult("Age", validation);
-            validation = ValidateName(p);
-            ProcessValidationResult("Name", validation);
+            var validation2 = validation.Bind(ValidateName);
+            ProcessValidationResult(validation);
+            //validation = ValidateName(p);
+            //ProcessValidationResult("Name", validation);
         }
 
-        private static void ProcessValidationResult(string description,
-                Validation<string, Person> validation) {
+        private static void ProcessValidationResult(Validation<string, Person> validation) {
             if (!validation.IsSuccess()) {
-                var failure = validation as Failure<string, Person>;
-                if (failure != null) {
-                    Console.WriteLine("{0} validation error", description);
-                    Console.WriteLine(failure.Left);
-                }
+               Console.WriteLine("validation error");
+                Console.WriteLine(validation.Left);
             } else {
-                Console.WriteLine("{0} validation successful", description);
+                Console.WriteLine("validation successful");
             }
         }
 

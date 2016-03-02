@@ -4,12 +4,16 @@ namespace Monads {
     
     public abstract class Validation<L, A> {
 
-        protected readonly A m_value;
+        private readonly A m_value;
 
         public A Value {
             get {
                 return m_value;
             }
+        }
+
+        public abstract L Left {
+            get;
         }
 
         protected Validation(A value) {

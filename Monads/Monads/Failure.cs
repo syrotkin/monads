@@ -11,21 +11,21 @@ namespace Monads {
             m_left = left;
         }
 
-        public L Left {
+        public override L Left {
             get {
                 return m_left;
             }
         }
 
         public override Validation<L, B> Map<B>(Func<A, B> mapper) {
-            return CreateFailure(Left, mapper(m_value));
+            return CreateFailure(Left, mapper(Value));
         }
 
         public override Validation<L, B> Bind<B>(Func<A, Validation<L, B>> mapper) {
-            var result = mapper(m_value);
-            return result.IsSuccess()
-                    ? CreateFailure(Left, result.Value)
-                    : CreateFailure(((Failure<L, B>)result).Left, result.Value);
+            var nextValidation = mapper(Value);
+            return nextValidation.IsSuccess()
+                    ? CreateFailure(Left, nextValidation.Value)
+                    : CreateFailure(nextValidation.Left, nextValidation.Value);
         }
 
         public override bool IsSuccess() {
